@@ -12,7 +12,7 @@ process synchronized means that the internal state only updates when you call pr
 Temporal_Binary_Switch :: struct {
 
     State_Update_Method :: enum {
-        MANUAL;
+        IMMEDIATE;
         PROCESS_SYNCHRONIZED;
     }
 
@@ -40,7 +40,7 @@ to_string :: (using tbs: *Temporal_Binary_Switch) -> string {
 
 set :: (using tbs: *Temporal_Binary_Switch, value: bool) {
     if #complete state_update_method == {
-        case .MANUAL;
+        case .IMMEDIATE;
             update_state(tbs, value);
         case .PROCESS_SYNCHRONIZED;
             state_to_process = value;
@@ -110,7 +110,7 @@ process :: (using tbs: *Temporal_Binary_Switch) {
     if #complete state_update_method == {
         case .PROCESS_SYNCHRONIZED;
             update_state(tbs, state_to_process);
-        case .MANUAL;
+        case .IMMEDIATE;
             // do nothing
     }
 }
